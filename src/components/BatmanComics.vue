@@ -1,30 +1,35 @@
 <template>
-  <ul class="list">
-    <li class="item">name: {{ comic.name }}</li>
-    <li class="item">premiered: {{ comic.premiered }}</li>
-    <li class="item">rating: {{ comic.rating.average }}</li>
-    <li class="item">image url: {{ comic.image.medium }}</li>
-    <li class="item">read more: {{ comic.url }}</li>
-  </ul>
+  <section class="comics-list">
+    <batman-comic v-for="comic in batmanComics" :comic="comic.show" :key="comic.show.id" class="single-comic"/>
+  </section>
 </template>
 <script>
-  export default {
-    props: {
-      comic: {
-        type: Object,
-        default: () => {}
-      },
+import BatmanComic from './BatmanComic.vue';
+
+export default {
+  components: {
+    BatmanComic,
+  },
+  props: {
+    batmanComics: {
+      type: Array,
+      default: () => []
     },
-  }
+  },
+}
 </script>
 <style scoped>
-  .list {
-    background: green;
-    border: 1px solid red;
-    margin: 5px;
+  .comics-list {
+    font-family: -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif;
   }
 
-  .item {
-    color: pink;
+  .single-comic {
+    color: #282828;
+    list-style-type: none;
+    text-align: left;
+    border: 1px solid #c2c2c2;
+    margin: 2em 1em;
+    padding: 2em;
+    border-radius: .5em;
   }
 </style>

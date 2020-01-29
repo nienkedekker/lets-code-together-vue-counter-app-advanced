@@ -1,60 +1,68 @@
 <template>
   <div id="app">
-    <div class="container">
-      <h2 class="counter-text">{{ count }}</h2>
-      <!--If we want to directly listen to events emitted from Vue components, we have to use the "native" modifier. -->
+    <section class="container">
+      <h1 class="counter-text">{{ count }}</h1>
       <counter-button @click.native="incrementCount" title="Increment count"/>
       <counter-button @click.native="decrementCount" title="Decrement count"/>
       <counter-button @click.native="resetCount" title="Reset count"/>
 
-      <div v-if="count === 0">
-        click the thing
-      </div>
-      <div v-else>
-        <batman-comics v-for="n in count" :key="n" :comic="batmanShows[n].show" />
-      </div>
-    </div>
+      <p v-if="count === 0" class="warning">
+        Your count is {{ count }}. Increase your count to see what happens!
+      </p>
+
+      <batman-comics v-else :batman-comics="batmanComicsToRender" />
+    </section>
   </div>
 </template>
 
 <script>
-  import CounterButton from './components/CounterButton.vue';
-  import BatmanComics from './components/BatmanComics.vue';
+import CounterButton from './components/CounterButton.vue';
+import BatmanComics from './components/BatmanComics.vue';
 
-  export default {
-    name: 'app',
-    components: {
-      CounterButton,
-      BatmanComics
-    },
-    data() {
-      return {
-        count: 0,
-        batmanShows: [],
-      }
-    },
-    mounted() {
-      this.fetchBatmanComics();
-    },
-    methods: {
-      incrementCount() {
-        this.count = this.count + 1;
-      },
-      decrementCount() {
-        this.count = this.count - 1;
-      },
-      resetCount() {
-        this.count = 0;
-      },
-      fetchBatmanComics() {
-        fetch('https://api.tvmaze.com/search/shows?q=batman')
-          .then(response => response.json())
-          .then(response => { this.batmanShows = response; })
-          // eslint-disable-next-line no-console
-          .catch(error => console.log(error))
-      }
+export default {
+  name: 'app',
+  components: {
+    CounterButton,
+    BatmanComics
+  },
+  data() {
+    return {
+      count: 0,
+      batmanShows: [],
     }
+  },
+  mounted() {
+    this.fetchBatmanComics();
+  },
+  computed: {
+    // Why do we need to do this?
+    // Try to see what happens when you put `this.batmanShows` directly in our batman-comics component.
+    // What show will you see first? Is it the correct show compared to the array we receive from the API?
+    batmanComicsToRender() {
+      return this.batmanShows.filter((batmanShows, index) => {
+        return index < this.count
+      });
+    }
+  },
+  methods: {
+    incrementCount() {
+      this.count = this.count + 1;
+    },
+    decrementCount() {
+      this.count = this.count - 1;
+    },
+    resetCount() {
+      this.count = 0;
+    },
+    fetchBatmanComics() {
+      fetch('https://api.tvmaze.com/search/shows?q=batman')
+        .then(response => response.json())
+        .then(response => { this.batmanShows = response; })
+        // eslint-disable-next-line no-console
+        .catch(error => console.log(error))
+    },
   }
+}
 </script>
 
 <style>
@@ -96,9 +104,13 @@
     width: 100%;
     max-width: 800px;
     padding: 1rem 15px;
-    margin: 0 auto;
+    margin: 1em auto;
     background-color: #f8f9fa;
     border: 1px solid rgba(184, 141, 152, 0.38);
     border-radius: 0.25rem;
+  }
+
+  .warning {
+    background: orange;
   }
 </style>
