@@ -1,6 +1,17 @@
 <template>
   <section class="comics-list">
-    <batman-comic v-for="comic in batmanComics" :comic="comic.show" :key="comic.show.id" class="single-comic"/>
+    <batman-comic
+      v-for="comic in batmanComics"
+      :comic="comic.show"
+      :key="comic.show.id"
+      :id="comic.show.id"
+      :name="comic.show.name"
+      :url="comic.show.url"
+      :image="comic.show.image.medium"
+      :average-rating="comic.show.rating.average"
+      :premiere-date="comic.show.premiered"
+      class="single-comic"
+    />
   </section>
 </template>
 <script>
@@ -25,7 +36,6 @@ export default {
 
   .single-comic {
     color: #282828;
-    list-style-type: none;
     text-align: left;
     border: 1px solid #c2c2c2;
     margin: 2em 1em;

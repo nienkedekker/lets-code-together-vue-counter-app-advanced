@@ -20,7 +20,6 @@ import CounterButton from './components/CounterButton.vue';
 import BatmanComics from './components/BatmanComics.vue';
 
 export default {
-  name: 'app',
   components: {
     CounterButton,
     BatmanComics
@@ -35,7 +34,7 @@ export default {
     this.fetchBatmanComics();
   },
   computed: {
-    // Why do we need to do this?
+    // Why do we need to filter the array we receive from the API?
     // Try to see what happens when you put `this.batmanShows` directly in our batman-comics component.
     // What show will you see first? Is it the correct show compared to the array we receive from the API?
     batmanComicsToRender() {
@@ -46,14 +45,18 @@ export default {
   },
   methods: {
     incrementCount() {
+      // Any way you could make this assignment shorter?
       this.count = this.count + 1;
     },
     decrementCount() {
+      // Any way you could make this assignment shorter?
       this.count = this.count - 1;
     },
     resetCount() {
       this.count = 0;
     },
+    // What other shows could you fetch here?
+    // Would you need to edit the `BatmanComics` and `BatmanComic` components?
     fetchBatmanComics() {
       fetch('https://api.tvmaze.com/search/shows?q=batman')
         .then(response => response.json())
